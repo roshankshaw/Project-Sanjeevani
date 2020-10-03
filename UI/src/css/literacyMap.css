@@ -1,0 +1,44 @@
+#map    { position: relative; min-height: 500px; }
+
+.district, .disputed, .state rect, .state path { stroke: #a9a9a9; stroke-width: 1px; }
+
+.district:hover { stroke: #777777; stroke-width: 1px; fill-opacity: .7; }
+.state:hover rect { stroke: #777777; stroke-width: 2px; fill-opacity: .7; }
+.state:hover path { fill-opacity: .7; }
+
+#select {
+	position:absolute;
+	left: 500px;
+	top: 100px;
+        font: 12px sans-serif;
+        color: #333;
+}
+
+#tooltip h3 {
+        margin:2px;
+        font-size:14px;
+}
+#tooltip h4 {
+        margin:2px;
+        font-size:10px;
+}
+#tooltip {
+        position: absolute;           
+        background:rgba(0,0,0,0.8);
+        text-align: left;
+        border:1px;
+        border-radius:5px;
+        font: 12px sans-serif;        
+        width:auto;
+        padding:4px;
+        color:white;
+        opacity:0;
+        pointer-events: none;         
+}
+#tooltip table{
+        table-layout:fixed;
+}
+#tooltip tr td{
+        padding:2px;
+        margin:0;
+}
