@@ -91,7 +91,9 @@ The UI consists of three Components :
 
 ![](Screenshots/UI-tab1-c.png)
 
-2.
+2. Parameter Filtering - This interface creates a map which highlights the constituencies based on population, active cases and risk
+
+![](Screenshots/UI-tab2.png)
 
 3. Covid Clusters - This Component creates a Map which shows constituencies grouped as clusters based on risk (corona active cases). The same color defines that the constituencues belong to the same cluster. The intensity of color shows which constituencies in the cluster have a higher priority.
 
