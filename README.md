@@ -24,9 +24,17 @@ The covid data is being fetched from [api.covid19india.org](https://api.covid19i
 
 1. First the constituencies across India are being clustered with **k-means clustering** and the optimal k value is being estimated with **Elbow method** dynamically in the program.
 2. The clusters are ranked based on risk and assigned a non-neg integer named as **priority i.e. 0, 1, 2, 3 etc. (high priority implies high risk)**.
-3. To rank the constituencies under a particular cluster the priority is further tuned by adding a fraction within (0 to 0.5). This fracation is being calc as **active-cases x log10(population)** that's normalized within 0-0.5.
+3. To rank the constituencies under a particular cluster the priority is further tuned by adding a fraction within (0 to 0.5). This fracation is being calc as 
+
+**active-cases x log10(population)**
+
+that's normalized within 0-0.5.
+
 4. Each cluster is given different color and higher darkness of color is being given to the clusters dynamically **(i.e. more priority implies darker color)**.
-5. Darkness in color for Recovered, Confirmed and Active cases is also being calculated based on counts **(higher count implies darker color)**. *[darkness = normalized(log2(cases))]*
+5. Darkness in color for Recovered, Confirmed and Active cases is also being calculated based on counts **(higher count implies darker color)**.
+
+**darkness = normalized(log2(cases))**
+
 6. Data received from sources were dirty and inconsistent containing nulls. Data was cleaned and Null filling methods were applied prior to all processes mentioned above.
 
 ### How to run
