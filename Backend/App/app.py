@@ -13,14 +13,21 @@ def getCases():
 	all_rows=query.getCases()
 	res={}
 	for row in all_rows:
-	  data={row[1]:{
-	    "state":row[0],
-	    "active":row[2],
-	    "confirmed":row[3],
-	    "deceased":row[4],
-	    "recovered":row[5],
-	    "priority":row[6],
-	    "color":row[7]
+	  data={row[6]:{
+       "state":row[1],
+       "active":row[2],
+       "confirmed":row[3],
+       "deceased":row[4],
+       "recovered":row[5],
+       "constituency":row[6],
+       "color":row[14],
+      "active_normalized":row[7],
+      "deceased_normalized":row[8],
+      "recovered_normalized":row[9],
+      "confirmed_normalized":row[10],
+      "population":row[11],
+      "priority":row[12],
+      "tuned_priority":row[13]
 	  }}
 	  res.update(data)
 
@@ -30,16 +37,52 @@ def getCases():
 def getSorted(column_name):
 	all_rows=query.getSortedByColumn(column_name)
 	res={}
-	for row in all_rows:
-		data={row[1]:{
-		"state":row[0],
-		"active":row[2],
-		"confirmed":row[3],
-		"deceased":row[4],
-		"recovered":row[5],
-		"priority":row[6],
-		"color":row[7]
-		}}
+	for i, row in enumerate(all_rows):
+		data={i:{
+      "state":row[1],
+      "active":row[2],
+      "confirmed":row[3],
+      "deceased":row[4],
+      "recovered":row[5],
+      "constituency":row[6],
+      "color":row[14],
+      "active_normalized":row[7],
+      "deceased_normalized":row[8],
+      "recovered_normalized":row[9],
+      "confirmed_normalized":row[10],
+      "population":row[11],
+      "priority":row[12],
+      "tuned_priority":row[13],
+      "index":i
+    }}
+		res.update(data)
+
+	return jsonify(dict(res))
+
+@app.route('/getSortedCols/<column_names>')
+def getSortedCols(column_names):
+	all_rows=query.getSortedByColumns(column_names)
+  # if not all_rows:
+  #   return "send column map in correct format {'col1':'DESC','col2':'ASC'}"
+	res={}
+	for i, row in enumerate(all_rows):
+		data={i:{
+      "state":row[1],
+      "active":row[2],
+      "confirmed":row[3],
+      "deceased":row[4],
+      "recovered":row[5],
+      "constituency":row[6],
+      "color":row[14],
+      "active_normalized":row[7],
+      "deceased_normalized":row[8],
+      "recovered_normalized":row[9],
+      "confirmed_normalized":row[10],
+      "population":row[11],
+      "priority":row[12],
+      "tuned_priority":row[13],
+      "index":i
+    }}
 		res.update(data)
 
 	return jsonify(dict(res))
