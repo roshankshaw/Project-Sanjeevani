@@ -3,7 +3,6 @@ import ClusterRenderMap from './../../components/clusterMap';
 import './../../css/literacyMap.css';
 
 const Dashboard = () => (
-  <div className="content">
     <div className="container-fluid">
       <div className="row">
         <div className="col-md-4">
@@ -23,7 +22,6 @@ const Dashboard = () => (
       </div> */}
 
     </div>
-  </div>
 );
 
 export default Dashboard;

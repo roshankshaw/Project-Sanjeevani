@@ -19,7 +19,7 @@ class SideBar extends Component {
     } = this.props;
 
     return (
-      <div className="sidebar" data-color={backgroundColor} data-image={backgroundImage}>
+      <div className="sidebar" id="sidebar-id" data-color={backgroundColor} data-image={backgroundImage}>
 
         {/* <div className="brand">
           <a href="http://jslancer.com" className="brand-name">

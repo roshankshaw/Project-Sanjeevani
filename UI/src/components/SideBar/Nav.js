@@ -14,19 +14,19 @@ class Nav extends Component {
         <li className={location.pathname === '/' ? 'active' : null}>
           <Link to="/">
             <i className="pe-7s-graph"></i>
-            <p>Covid Cases</p>
+            <p>Covid Statistics</p>
           </Link>
         </li>
         <li className={location.pathname === '/components' ? 'active' : null}>
           <Link to="/components">
             <i className="pe-7s-graph"></i>
-            <p>Priority Map</p>
+            <p>Population Priority</p>
           </Link>
         </li>
         <li className={location.pathname === '/profile' ? 'active' : null}>
           <Link to="/profile">
             <i className="pe-7s-graph"></i>
-            <p>Filter Priority</p>
+            <p>Covid Clusters</p>
           </Link>
         </li>
         {/* <li className={this.isPathActive('/components') || this.state.componentMenuOpen ? 'active' : null}>

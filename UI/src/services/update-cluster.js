@@ -1,20 +1,49 @@
-function updateCluster(districts) {
-
-    // array with random colors
-    // this will be replaced by cluster color for an individual district
-    let randomCol = ["#40FF00", "#FE2E2E", "#F7FE2E", "#FF0040", "#0101DF"];
+function updateCluster(districts, data) {
 
     let district = districts.features;
+    let numClusters = 4;
     for (let i = 0; i < district.length; i++) {
         let literacy = district[i].properties;
+        let districtId = (district[i].id).toLowerCase();
+        if (data[districtId] !== undefined) {
+            // priority considered color till columns corrected
+            //console.log(lum);
+            let clusterColor = data[districtId].color;
+            let priority = 1 + data[districtId].priority;
 
-        //literacy considered as Priority
-        literacy.Literacy = Math.floor(Math.random() * 101);
+            // literacy and maleliteracy considered as priority and color
+            literacy.Literacy = priority;
+            literacy.MaleLiteracy = clusterColor;
+        }
+        else {
 
-        //MaleLiteracy considered as cluster color
-        literacy.MaleLiteracy = randomCol[Math.floor(Math.random() * 5)];
+            // literacy and maleliteracy considered as priority and color
+            literacy.Literacy = "NA";
+            literacy.MaleLiteracy = "#EAEAFA";
+        }
     }
 
+}
+
+function ColorLuminance(hex, lum) { // function returns color intensity of "hex" 
+                                                    //based on "lum" in our case priority
+
+	// validate hex string
+	hex = String(hex).replace(/[^0-9a-f]/gi, '');
+	if (hex.length < 6) {
+		hex = hex[0]+hex[0]+hex[1]+hex[1]+hex[2]+hex[2];
+	}
+	lum = lum || 0;
+
+	// convert to decimal and change luminosity
+	var rgb = "#", c, i;
+	for (i = 0; i < 3; i++) {
+		c = parseInt(hex.substr(i*2,2), 16);
+		c = Math.round(Math.min(Math.max(0, c + (c * lum)), 255)).toString(16);
+		rgb += ("00"+c).substr(c.length);
+	}
+    console.log(rgb);
+	return rgb;
 }
 
 export default updateCluster;
