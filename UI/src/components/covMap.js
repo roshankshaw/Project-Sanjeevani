@@ -8,13 +8,6 @@ import axios from 'axios';
 
 class RenderMap extends Component {
 
-  constructor(props) {
-    super(props)
-    this.state = {
-      posts: []
-    }
-  }
-
   componentDidMount() {
 
     // d3Q.queue()
@@ -22,8 +15,8 @@ class RenderMap extends Component {
     //   .defer(d3.json, "../data/ne_10m_admin_0_Kashmir_Occupied.json")
     //   .await(function (error, topoMain, topoKashmir) {
     Promise.all([
-      d3.json("https://raw.githubusercontent.com/akshat-khare/datavisproject/master/IND_adm2_Literacy.json"),
-      d3.json("https://raw.githubusercontent.com/harshsri2208/Covid-Dash-UI/master/public/data/ne_10m_admin_0_Kashmir_Occupied.json?token=AI3AZSOVLFA5POK36ECQEIS7PVRJI")
+      d3.json("https://raw.githubusercontent.com/harshsri2208/Covid-Dash-UI/master/src/data/IND_adm2_Literacy.json?token=AI3AZSNSHNORILAYCQM4LJK7QKBSM"),
+      d3.json("https://raw.githubusercontent.com/harshsri2208/Covid-Dash-UI/master/src/data/ne_10m_admin_0_Kashmir_Occupied.json?token=AI3AZSILC54Q7R4QT6J3YT27QKBT2")
     ])
       .then(async function (files) {
         let topoMain = files[0];
@@ -39,23 +32,13 @@ class RenderMap extends Component {
         // Radio HTML
         await d3.select("#select").call(selectFilter());
         var filter = await d3.select('#select input[name="gender"]:checked').node().value;
-        console.log(filter);
-        //console.log(districts.features[0].properties.Literacy)
+        //var filter = "MaleLiteracy"; // decides color
 
-        // fetch data from api
-        try {
+        let data = await axios.get("http://localhost:5000/getCases").then(response => response.data).then(data => {
+          return data;
+        })
 
-          await fetch("127.0.0.1:5000/getCases/").then(response => response.json()).then(data => {
-            console.log(data)
-          })
-
-        }
-        catch (e) {
-          console.log(e);
-        }
-
-        updateCases(districts);
-
+        updateCases(districts, data);
 
         // Color codes for districts based on Literacy Rates
         colorCode(districts.features, filter);
@@ -63,7 +46,10 @@ class RenderMap extends Component {
 
         // Map render
         var map = districtMap(districts, disputed).width(800).height(700).scale(1200).propTag(filter);
-        d3.select("#map").call(map);
+        d3.select("#map")
+                .attr("class","container")
+                .call(map);
+
 
         // On change of selection re-render
         d3.selectAll("#select input[name=gender]").on("change", function () {
@@ -78,9 +64,9 @@ class RenderMap extends Component {
       function render(selection) {
         selection.each(function () {
           d3.select(this).html("<form>" +
-            "<input type='radio' name='gender' value='Literacy' checked> Total<br>" +
-            "<input type='radio' name='gender' value='FemaleLiteracy'> Active<br>" +
-            "<input type='radio' name='gender' value='MaleLiteracy'> Recovered" +
+            "<input type='radio' name='gender' value='MaleLiteracy' checked> Active<br>" +
+            "<input type='radio' name='gender' value='Literacy'> Confirmed<br>" +
+            "<input type='radio' name='gender' value='FemaleLiteracy'> Recovered" +
             "</form>");
         });
       } // render
@@ -88,13 +74,31 @@ class RenderMap extends Component {
     }
 
     function colorCode(data, filter) {
-      var color = d3.scaleThreshold()
-        .domain([65, 70, 75, 80, 85, 90, 95, 100])
-        .range(d3.schemeReds[8]);
+      var colours;
+      if (filter === "Literacy") { // confirmed
+        colours = ["#E6E6FA", "#FF00FF", "#E6E6FA", "#8A2BE2", "#9400D3"];
+        var color = d3.scaleLinear()
+          .domain(d3.range(0, 1, 1.0 / (colours.length - 1)))
+          .range(colours);
+      }
+      else {
+        if (filter === "MaleLiteracy") { //active
+          colours = ["#FFF5F0", "#F87217", "#FFF5F0", "#FF2400", "#F70D1A"];
+        }
+        else if (filter === "FemaleLiteracy") { // recovered
+          colours = ["#FFFFE0", "#00FA9A", "#FFFFE0", "#008000", "#808000"];
+        }
+        var color = d3.scaleLinear()
+          .domain(d3.range(0, 1, 1.0 / (colours.length - 1)))
+          .range(colours);
+
+      }
       data.forEach(function (d) {
-        if (isNaN(d.properties[filter])) { d.properties[filter] = 0; }
-        d.color = color(d.properties[filter]);
+        if (isNaN(d.properties[filter][0])) { d.properties[filter][0] = 0; }
+        d.color = color(d.properties[filter][0]);
       });
+
+
     }
 
     function colorDisputed(data) {
@@ -107,7 +111,7 @@ class RenderMap extends Component {
     function districtMap(districts, disputed) {
 
       var width = 800, height = 700, scale = 1200;
-      var propTag = 'Cases', ttName = 'Cases', unit = '';
+      var valTag = 'Literacy', propTag = '', ttName = 'Vaccines required<br>(per million population)', unit = '';
 
       function render(selection) {
         selection.each(function () {
@@ -137,10 +141,22 @@ class RenderMap extends Component {
               d3.select("#tooltip").transition()
                 .duration(200)
                 .style("opacity", .9);
-              d3.select("#tooltip").html("<h3>" + (data.id) + "</h3><h4>(" + (data.properties.NAME_1) + ")</h4><table>" +
-                "<tr><td>" + ttName + "</td><td>" + (data.properties[propTag]) + unit + "</td></tr>" +
-                "</table>")
-                .style("left", (d.pageX - document.getElementById('map').offsetLeft + 20) + "px")
+              var h1 = "<h3>" + (data.id) + "</h3><h4>(" + (data.properties.NAME_1) + ")</h4><table>" +
+                "<tr><td>" + ttName + "</td><td>" + (data.properties[valTag][1]) + unit + "</td></tr>";
+              var h2;
+              var h3 = "</tr>" +
+                "</table>";
+              if (propTag === "Literacy") {
+                h2 = "<tr><td> Confirmed Cases </td>" + "<td>" + data.properties[propTag][2] + "</td><td></td>";
+              }
+              else if (propTag === "MaleLiteracy") {
+                h2 = "<td> Active Cases </td>" + "<td>" + data.properties[propTag][1] + "</td><td></td>";
+              }
+              else if (propTag === "FemaleLiteracy") {
+                h2 = "<td> Recovered Cases </td>" + "<td>" + data.properties[propTag][1] + "</td><td></td>";
+              }
+              d3.select("#tooltip").html(h1 + h2 + h3)
+                .style("left", (d.pageX - document.getElementById('map').offsetLeft + 20 - document.getElementById('sidebar-id').offsetWidth) + "px")
                 .style("top", (d.pageY - document.getElementById('map').offsetTop - 60) + "px");
             })
             .on("mouseout", function (d) {
