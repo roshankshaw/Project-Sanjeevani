@@ -1,5 +1,3 @@
-# Project-Sanjeevani
-
 # Project Sanjeevani
 
 A **real-time map pandemic visualizer and constituency-wise risk analyzer interactive website prototype** to help a fair Vaccine distribution system (once released) in the context of Current Covid situation in India to **ease out distribution of Covid during and post pandemic**.
