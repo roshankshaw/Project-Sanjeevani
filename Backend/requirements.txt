@@ -1,7 +1,6 @@
 scikit-learn
 pandas
-matplotlib
 numpy
+ipynb
 Flask
-requests
 flask_cors

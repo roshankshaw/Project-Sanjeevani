@@ -14,13 +14,13 @@ def getCases():
 	res={}
 	for row in all_rows:
 	  data={row[6]:{
-       "state":row[1],
-       "active":row[2],
-       "confirmed":row[3],
-       "deceased":row[4],
-       "recovered":row[5],
-       "constituency":row[6],
-       "color":row[14],
+	    "state":row[1],
+	    "active":row[2],
+	    "confirmed":row[3],
+	    "deceased":row[4],
+	    "recovered":row[5],
+	    "constituency":row[6],
+	    "color":row[14],
       "active_normalized":row[7],
       "deceased_normalized":row[8],
       "recovered_normalized":row[9],
@@ -37,8 +37,8 @@ def getCases():
 def getSorted(column_name):
 	all_rows=query.getSortedByColumn(column_name)
 	res={}
-	for i, row in enumerate(all_rows):
-		data={i:{
+	for row in all_rows:
+		data={row[6]:{
       "state":row[1],
       "active":row[2],
       "confirmed":row[3],
@@ -52,8 +52,7 @@ def getSorted(column_name):
       "confirmed_normalized":row[10],
       "population":row[11],
       "priority":row[12],
-      "tuned_priority":row[13],
-      "index":i
+      "tuned_priority":row[13]
     }}
 		res.update(data)
 
@@ -65,8 +64,8 @@ def getSortedCols(column_names):
   # if not all_rows:
   #   return "send column map in correct format {'col1':'DESC','col2':'ASC'}"
 	res={}
-	for i, row in enumerate(all_rows):
-		data={i:{
+	for index,row in enumerate(all_rows):
+		data={row[6]:{
       "state":row[1],
       "active":row[2],
       "confirmed":row[3],
@@ -81,7 +80,7 @@ def getSortedCols(column_names):
       "population":row[11],
       "priority":row[12],
       "tuned_priority":row[13],
-      "index":i
+      "index":index
     }}
 		res.update(data)
 
