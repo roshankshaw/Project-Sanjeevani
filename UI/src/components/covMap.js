@@ -15,8 +15,8 @@ class RenderMap extends Component {
     //   .defer(d3.json, "../data/ne_10m_admin_0_Kashmir_Occupied.json")
     //   .await(function (error, topoMain, topoKashmir) {
     Promise.all([
-      d3.json("https://raw.githubusercontent.com/harshsri2208/Covid-Dash-UI/master/src/data/IND_adm2_Literacy.json?token=AI3AZSNSHNORILAYCQM4LJK7QKBSM"),
-      d3.json("https://raw.githubusercontent.com/harshsri2208/Covid-Dash-UI/master/src/data/ne_10m_admin_0_Kashmir_Occupied.json?token=AI3AZSILC54Q7R4QT6J3YT27QKBT2")
+      d3.json("https://raw.githubusercontent.com/akshat-khare/datavisproject/master/IND_adm2_Literacy.json"),
+      d3.json("https://raw.githubusercontent.com/akshat-khare/datavisproject/master/ne_10m_admin_0_Kashmir_Occupied.json")
     ])
       .then(async function (files) {
         let topoMain = files[0];
