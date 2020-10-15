@@ -39,7 +39,7 @@ class ClusterRenderMap extends Component {
         //await d3.select("#select").call(selectFilter());
         //var filter = await d3.select('#select input[name="gender"]:checked').node().value;
         
-        let data = await axios.get("http://localhost:5000/getCases").then(response => response.data).then(data => {
+        let data = await axios.get("http://instantinopaul.pythonanywhere.com/getCases").then(response => response.data).then(data => {
           return data;
         })
 
