@@ -52,7 +52,7 @@ class PopRenderMap extends Component {
         if(curstate.risk=='low')
           apiparam= apiparam+ `'priority':'desc',`;
         apiparam= apiparam+'}';
-        let api="http://localhost:5000/getSortedCols/"+apiparam;
+        let api="http://instantinopaul.pythonanywhere.com/getSortedCols/"+apiparam;
         let data = await axios.get(api).then(response => response.data).then(data => {
           return data;
         })
